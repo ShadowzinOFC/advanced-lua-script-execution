@@ -85,18 +85,6 @@ namespace pIni
 
     public:
 
-        bool Exist(const std::string& section)
-        {
-           auto it =  m_sections.find(section);
-
-           if (it != m_sections.end())
-           {
-               return true;
-           }
-
-           return false;
-        }
-
         void Save()
         {
             auto contentStream = std::ostringstream(); //SS content.
@@ -117,6 +105,17 @@ namespace pIni
             auto file = win32::File(this->m_fileName); //Set file.
 
             file.Write(contentStream.str()); //Save changes to file.
+        }
+
+        bool Exist(const std::string& section)
+        {
+            if (this->m_sections.find(
+                section) != this->m_sections.end()) //Find section.
+            {
+                return true; //Return true since the section exists.
+            }
+
+            return false; //Return false since section isnt in vec.
         }
 
     public:
