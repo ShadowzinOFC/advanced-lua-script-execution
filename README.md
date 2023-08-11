@@ -22,7 +22,7 @@ First of all remember that this ini system takes restart of process to apply res
 | blacklist             | funtionality                                                                |
 | ----------------- | ------------------------------------------------------------------ |
 | input resource name | Can be set as 1 or 0: If set to 1 means the resource will be blacklisted: Example below| 
-| spawnamanger | 1 |
+| spawnmanager | 1 |
 
 | config             | funtionality                                                                |
 | ----------------- | ------------------------------------------------------------------ |
