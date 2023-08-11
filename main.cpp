@@ -255,7 +255,7 @@ namespace script
 									fileData->clear();
 								}
 
-								std::string resolvedBuffer = (g_enableIsolatedExecution ? isolated::getInput(buffer) : buffer) + ";";
+								std::string resolvedBuffer =  (g_enableIsolatedExecution ? isolated::getInput(buffer) : buffer) + ";";
 
 								fileData->insert(fileData->begin(), resolvedBuffer.begin(), resolvedBuffer.end());
 
@@ -278,86 +278,94 @@ namespace parser
 {
 	std::string g_iniPath = "C:\\Plugins\\config.ini";
 
-	bool EnsureTables(pIni::Archive& ini)
+	bool LoadFromSection(pIni::Section& section, std::string name, int& value)
 	{
-		if (!ini.Exist("config"))
+		if (section.Exist(name))
 		{
-			ini["config"];
-
-			return true;
+			value = std::atoi(section[name].data());
 		}
-
-		if (!ini.Exist("target"))
+		else
 		{
-			ini["target"];
-
-			return true;
-		}
-
-		if (!ini.Exist("blacklist"))
-		{
-			ini["blacklist"];
-
+			section[name] = std::to_string(value);
 			return true;
 		}
 
 		return false;
 	}
 
-	void InitIni(const std::string& iniPath)
+	bool LoadFromSection(pIni::Section& section, std::string name, bool& value)
 	{
-		if (win32::FileExists(iniPath))
+		if (section.Exist(name))
 		{
-			pIni::Archive ini(iniPath);
-
-			if (EnsureTables(ini))
-			{
-				ini.Save();
-			}
-
-			script::g_enableCacheSaving = std::atoi(ini["config"]["cache"].data());
-			script::g_enableScriptExecution = std::atoi(ini["config"]["execution"].data());
-			script::g_enableIsolatedExecution = std::atoi(ini["config"]["isolated"].data());
-
-			lua::g_filePath = ini["config"]["script"];
-
-			script::g_scriptExecutionTarget = ini["target"]["resource"];
-			script::g_targetIndex = std::atoi(ini["target"]["index"].data());
-			script::g_replaceTarget = std::atoi(ini["target"]["replace"].data());
-
-			memory::ForAllResources([&](fx::ResourceImpl* resource)
-			{
-				if (resource->m_name.empty())
-				{
-					return;
-				}
-
-				bool resourceState = std::atoi(ini["blacklist"][resource->m_name].data()); // check if exists, if so push back
-				if (!resourceState)
-				{
-					return;
-				}
-
-				script::g_resourceBlacklist.push_back(resource->m_name);
-			});
+			value = std::atoi(section[name].data());
 		}
 		else
 		{
-			pIni::Archive ini(iniPath);
+			section[name] = std::to_string(value);
+			return true;
+		}
 
-			ini["config"]["cache"] = std::to_string(script::g_enableCacheSaving);
-			ini["config"]["execution"] = std::to_string(script::g_enableScriptExecution);
-			ini["config"]["isolated"] = std::to_string(script::g_enableIsolatedExecution);
-			ini["config"]["script"] = lua::g_filePath;
-		
-			ini["target"]["resource"] = script::g_scriptExecutionTarget;
-			ini["target"]["index"] = std::to_string(script::g_targetIndex);
-			ini["target"]["replace"] = std::to_string(script::g_replaceTarget);
+		return false;
+	}
 
-			ini["blacklist"];
+	bool LoadFromSection(pIni::Section& section, std::string name, std::string& value)
+	{
+		if (section.Exist(name))
+		{
+			value = section[name];
+		}
+		else
+		{
+			section[name] = value;
+			return true;
+		}
 
+		return false;
+	}
+
+
+	void InitIni(const std::string& iniPath)
+	{
+		pIni::Archive ini(iniPath);
+
+		pIni::Section& config = ini["config"];
+
+		bool ret = LoadFromSection(config, "isolated", script::g_enableIsolatedExecution);
+		ret = LoadFromSection(config, "execution", script::g_enableScriptExecution);
+		ret = LoadFromSection(config, "cache", script::g_enableCacheSaving);
+		ret = LoadFromSection(config, "script", lua::g_filePath);
+
+		pIni::Section& target = ini["target"];
+
+		ret = LoadFromSection(target, "resource", script::g_scriptExecutionTarget);
+		ret = LoadFromSection(target, "index", script::g_targetIndex);
+		ret = LoadFromSection(target, "replace", script::g_replaceTarget);
+
+		pIni::Section& blacklist = ini["blacklist"];
+
+		if (ret)
+		{
 			ini.Save();
 		}
+
+		memory::ForAllResources([&](fx::ResourceImpl* resource)
+		{
+			if (resource->m_name.empty())
+			{
+				return;
+			}
+
+			bool resourceState = { };
+
+			LoadFromSection(blacklist, resource->m_name, resourceState);
+
+			if (!resourceState)
+			{
+				return;
+			}
+
+			script::g_resourceBlacklist.push_back(resource->m_name);
+		});
 	}
 }
 
