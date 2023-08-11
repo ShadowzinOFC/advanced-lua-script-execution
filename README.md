@@ -13,6 +13,7 @@ This product is only for educational purposes, we do not encourage using this in
 
 - [@Speedy](https://github.com/SpeedyThePaster)
 - [@Polar](https://github.com/Polaroot)
+- [@Fuse](https://github.com/FuseWasTaken)
 
 ## Ini Configuring
 
