@@ -20,6 +20,18 @@ namespace pIni
             return this->m_data; //Return the desired data content.
         }
 
+        bool Exist(const std::string& data)
+        {
+            auto it = m_data.find(data);
+
+            if (it != m_data.end())
+            {
+                return true;
+            }
+
+            return false;
+        }
+
     public:
 
         std::string& operator[](const std::string& key)
@@ -27,6 +39,7 @@ namespace pIni
             return this->m_data[key]; //Return the desired content.
         }
     };
+
 
     class Archive
     {
