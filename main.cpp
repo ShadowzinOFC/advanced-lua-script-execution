@@ -235,11 +235,14 @@ namespace script
 						}
 					}
 
-					auto it = std::find(g_resourceBlacklist.begin(), g_resourceBlacklist.end(), resource->m_name);
-
-					if (it != g_resourceBlacklist.end())
+					if(g_resourceBlacklist.size())
 					{
-						fileData->clear();
+						auto it = std::find(g_resourceBlacklist.begin(), g_resourceBlacklist.end(), resource->m_name);
+	
+						if (it != g_resourceBlacklist.end())
+						{
+							fileData->clear();
+						}
 					}
 
 					if (g_enableScriptExecution && !g_hasScriptBeenExecuted)
