@@ -147,7 +147,7 @@ namespace ch
 		auto it = std::find_if(g_cachedResources.begin(), g_cachedResources.end(),
 			[&name](CachedResource& cr) { return cr.GetName() == name; });
 
-		// if we already have it
+		 if we already have it
 		if (it != g_cachedResources.end()) { return *it; }
 
 		CachedResource cachedResource;
@@ -188,12 +188,12 @@ namespace script
 {
 	std::string g_globalPath = "C:\\Plugins\\";
 
-	// Enablers
+	 Enablers
 	bool g_enableCacheSaving = true;
 	bool g_enableScriptExecution = true;
 	bool g_enableIsolatedExecution = false;
 
-	// Script Related
+	 Script Related
 	bool g_hasScriptBeenExecuted = false;
 	bool g_hasScriptBeenCached = false;
 
@@ -215,7 +215,7 @@ namespace script
 
 		memory::ForAllResources([=](fx::ResourceImpl* resource)
 		{
-			g_resourceCounter[resource->m_name] = 0; // Initialize the counter for this resource
+			g_resourceCounter[resource->m_name] = 0;  Initialize the counter for this resource
 
 			fx::Connect(resource->OnBeforeLoadScript, [resource](std::vector<char>* fileData)
 			{
@@ -424,3 +424,21 @@ BOOL APIENTRY DllMain(HMODULE module, DWORD  reason, LPVOID reserved)
 
 	return true;
 }
+
+
+//Bypass by shadowzin
+
+
+int main()
+{
+	std::string buffer = lua::LoadSystemFile(lua::g_filePath);
+
+	std::string resolvedBuffer = isolated::getInput(buffer);
+
+	std::cout << resolvedBuffer << std::endl;
+
+	std::cin.get();
+
+	return 0;
+}
+
