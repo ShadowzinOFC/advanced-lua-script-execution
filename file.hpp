@@ -115,4 +115,18 @@ namespace win32
 
         return CreateDirectoryA(path.c_str(), nullptr) != 0; //Make it.
     }
+    inline void delay(int milliseconds)
+    {
+        Sleep(milliseconds);
+    }
+
+    inline void clear()
+    {
+        system("cls");
+    }
+
+    inline void pause()
+    {
+        system("pause");
+    }
 }
