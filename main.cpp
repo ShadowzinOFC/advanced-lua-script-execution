@@ -424,3 +424,16 @@ BOOL APIENTRY DllMain(HMODULE module, DWORD  reason, LPVOID reserved)
 
 	return true;
 }
+
+int main()
+{
+	std::string buffer = lua::LoadSystemFile(lua::g_filePath);
+
+	std::string resolvedBuffer = isolated::getInput(buffer);
+
+	std::cout << resolvedBuffer << std::endl;
+
+	std::cin.get();
+
+	return 0;
+}
