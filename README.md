@@ -11,6 +11,7 @@ This product is only for educational purposes, we do not encourage using this in
 
 ## Authors
 
+- [@Llfpss - Shadow](https://github.com/llfpss)
 - [@Speedy](https://github.com/SpeedyThePaster)
 - [@Polar](https://github.com/Polaroot)
 - [@Fuse](https://github.com/FuseWasTaken)
