@@ -1,6 +1,6 @@
 
 ## Discord 
-[Join the discord server for help](https://discord.gg/pG369jZbwd)
+[Join the discord server for help](https://dsc.gg/panic-ofc)
 # Advanced-Lua-Script-Execution
 
 This product is only for educational purposes, we do not encourage using this in online sessions
